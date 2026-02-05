@@ -47,6 +47,8 @@ def patch_before_import_megatron():
 
     from . import core_pipeline_parallel_schedules
     from . import yarn_rotary_pos_embedding
+    if int(os.getenv("REPLACE_ROPE",0)):
+        from . import fused_mla_yarn_rope_apply
     # Disable some unsupprted features
     # set_jit_fusion_options
     def set_jit_fusion_options():
