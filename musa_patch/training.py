@@ -518,10 +518,10 @@ def training_log(loss_dict, total_loss_dict, learning_rate, decoupled_learning_r
         log_string = f" [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]"
         log_string += ' iteration {:8d}/{:8d} |'.format(
             iteration, args.train_iters)
-        # mfu = throughput / 465
-        # tokens_per_gpu_per_second = float(batch_size * args.seq_length) / elapsed_time_per_iteration / args.world_size
-        # log_string += ' tokens_per_gpu_per_second: {:.2f} /s |'.format(tokens_per_gpu_per_second)
-        # log_string += ' mfu: {:.4f} |'.format(mfu)
+        mfu = throughput / 465
+        tokens_per_gpu_per_second = float(batch_size * args.seq_length) / elapsed_time_per_iteration / args.world_size
+        log_string += ' tokens_per_gpu_per_second: {:.2f} /s |'.format(tokens_per_gpu_per_second)
+        log_string += ' mfu: {:.4f} |'.format(mfu)
         log_string += ' consumed samples: {:12d} |'.format(
             args.consumed_train_samples)
         if args.skipped_train_samples > 0:
@@ -577,7 +577,7 @@ def training_log(loss_dict, total_loss_dict, learning_rate, decoupled_learning_r
                 num_microbatches = get_num_microbatches()
                 report_theoretical_memory(args, num_microbatches=num_microbatches, verbose=True)
             report_memory('(after {} iterations)'.format(iteration))
-            # report_memory_flag = False
+            report_memory_flag = False
         timers.log(timers_to_log, normalizer=args.log_interval)
 
         # log to mlflow
@@ -648,7 +648,7 @@ def train(forward_step_func, model, optimizer, opt_param_scheduler,
 
     timers('interval-time', log_level=0).start(barrier=True)
     print_datetime('before the start of training step')
-    report_memory_flag = True
+    report_memory_flag = False # modified by zhengty
     # exit = False
     pre_hook_enabled = False
     should_exit = False
